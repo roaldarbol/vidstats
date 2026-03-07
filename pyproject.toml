@@ -1,0 +1,67 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "vidstats"
+version = "0.1.0"
+description = "Extract per-frame colour and luminosity metrics from video via ffprobe signalstats."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "Mikkel Roald-Arbøl", email = "vidstats.ez7zw@passmail.com" }]
+keywords = ["video", "colour", "luminosity", "ffprobe", "signalstats"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Multimedia :: Video",
+]
+dependencies = [
+    "typer>=0.9",
+    "polars>=0.20",
+    "typing_extensions>=4.0",
+]
+
+[project.scripts]
+vidstats = "vidstats.cli:cli"
+
+[project.urls]
+Repository = "https://github.com/roaldarbol/vidstats"
+Issues = "https://github.com/roaldarbol/vidstats/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/vidstats"]
+
+[tool.hatch.build.targets.sdist]
+include = ["src/", "tests/", "README.md", "LICENSE"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.0",
+    "pytest-cov",
+    "ruff",
+    "mypy",
+]
