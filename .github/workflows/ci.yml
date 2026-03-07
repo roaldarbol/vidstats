@@ -24,6 +24,14 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
+      - name: Install ffmpeg
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then sudo apt-get install -y ffmpeg
+          elif [ "$RUNNER_OS" == "macOS" ]; then brew install ffmpeg
+          elif [ "$RUNNER_OS" == "Windows" ]; then choco install ffmpeg
+          fi
+        shell: bash
+
       - name: Install package and dev dependencies
         run: uv sync --dev
 
