@@ -62,6 +62,39 @@ vidstats spider_abdomen.mp4 output.parquet --no-hwaccel
 vidstats --list-metrics
 ```
 
+
+## Python API
+
+vidstats can also be used directly from Python. The simplest path is the
+`extract()` convenience function:
+
+```python
+import vidstats
+
+df = vidstats.extract("spider_abdomen.mp4")
+```
+
+`df` is a Polars DataFrame with the same schema as the CLI output. Optional
+arguments mirror the CLI:
+
+```python
+df = vidstats.extract(
+    "spider_abdomen.mp4",
+    metrics=["YAVG", "SATAVG", "HUEMED"],  # default: all metrics
+    crop=(10, 20, 180, 180),               # (x, y, w, h) in pixels
+    include_time=True,                     # adds time_s column
+    fps=25.0,                              # override FPS for time_s
+    hwaccel="cuda",                        # hardware decode acceleration
+)
+```
+
+Write the result with any Polars method:
+
+```python
+df.write_parquet("output.parquet")
+df.write_csv("output.csv")
+```
+
 ## Supported output formats
 
 | Extension(s)                   | Format    |

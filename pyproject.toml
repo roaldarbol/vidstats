@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "vidstats"
-version = "0.1.0"
+version = "0.1.1"
 description = "Extract per-frame colour and luminosity metrics from video via ffprobe signalstats."
 readme = "README.md"
 license = "MIT"
