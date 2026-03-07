@@ -38,25 +38,25 @@ pip install vidstats
 
 ```bash
 # Extract all metrics → Parquet
-vidstats spider_abdomen.mp4 output.parquet
+vidstats input.mp4 output.parquet
 
 # Extract only luminance and saturation averages → CSV
-vidstats spider_abdomen.mp4 output.csv --metrics YAVG,SATAVG
+vidstats input.mp4 output.csv --metrics YAVG,SATAVG
 
 # Include both frame number and timestamp in seconds
-vidstats spider_abdomen.mp4 output.parquet --timestamps both
+vidstats input.mp4 output.parquet --timestamps both
 
 # Override FPS when stream metadata is missing or wrong
-vidstats spider_abdomen.mp4 output.parquet --timestamps both --fps 30
+vidstats input.mp4 output.parquet --timestamps both --fps 30
 
 # Apply a crop region (X Y W H) before extraction
-vidstats spider_abdomen.mp4 output.parquet --crop "10 20 180 180"
+vidstats input.mp4 output.parquet --crop "10 20 180 180"
 
 # Force format regardless of extension
-vidstats spider_abdomen.mp4 output.dat --format csv
+vidstats input.mp4 output.dat --format csv
 
 # Disable hardware acceleration
-vidstats spider_abdomen.mp4 output.parquet --no-hwaccel
+vidstats input.mp4 output.parquet --no-hwaccel
 
 # List all available metric names and their output column names
 vidstats --list-metrics
@@ -71,7 +71,7 @@ vidstats can also be used directly from Python. The simplest path is the
 ```python
 import vidstats
 
-df = vidstats.extract("spider_abdomen.mp4")
+df = vidstats.extract("input.mp4")
 ```
 
 `df` is a Polars DataFrame with the same schema as the CLI output. Optional
@@ -79,7 +79,7 @@ arguments mirror the CLI:
 
 ```python
 df = vidstats.extract(
-    "spider_abdomen.mp4",
+    "input.mp4",
     metrics=["YAVG", "SATAVG", "HUEMED"],  # default: all metrics
     crop=(10, 20, 180, 180),               # (x, y, w, h) in pixels
     include_time=True,                     # adds time_s column
