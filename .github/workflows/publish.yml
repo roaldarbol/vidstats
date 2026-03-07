@@ -12,11 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
-      - run: pip install -e ".[dev]"
-      - run: pytest tests/ -v --tb=short
+
+      - name: Install package and dev dependencies
+        run: uv sync --dev
+
+      - name: Run tests
+        run: uv run pytest tests/ -v --tb=short
 
   build:
     needs: test
@@ -24,15 +30,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v5
         with:
           python-version: "3.12"
 
-      - name: Install build tools
-        run: pip install build
-
       - name: Build distributions
-        run: python -m build
+        run: uv build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
