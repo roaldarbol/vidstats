@@ -1,0 +1,32 @@
+name: Audit
+
+# Security audit of the locked dependencies. Advisories land against uv.lock
+# independently of any code change, so this runs weekly against main (a failed
+# scheduled run emails the maintainer), on demand, and on PRs that change the lock.
+on:
+  schedule:
+    - cron: "0 6 * * 1"  # 06:00 UTC every Monday
+  pull_request:
+    paths:
+      - uv.lock
+      - .github/workflows/audit.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: Security audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v7
+
+      - name: Export locked dependencies
+        run: uv export --frozen --all-extras --all-groups --no-emit-project --no-hashes --output-file audit-requirements.txt
+
+      - name: Audit dependencies
+        run: uvx pip-audit --requirement audit-requirements.txt --no-deps --disable-pip
